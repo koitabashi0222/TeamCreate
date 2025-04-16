@@ -13,7 +13,8 @@ public class MeshVoxelizer : MonoBehaviour
     {
         MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
         if (meshRenderer == null) return;
-        meshRenderer.enabled = false;
+        Collider col = GetComponent<Collider>();
+        
 
         Bounds bounds = meshRenderer.bounds;
         Vector3 start = bounds.min;
@@ -35,6 +36,8 @@ public class MeshVoxelizer : MonoBehaviour
                 }
             }
         }
+        if (col != null) col.enabled = false;
+        meshRenderer.enabled = false;
     }
 }
 
