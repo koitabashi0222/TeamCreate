@@ -2,51 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MC_MeshGenerator : MonoBehaviour
+public static class MC_MeshGenerator
 {
-    public int width = 16;
-    public int height = 16;
-    public int depth = 16;
-    public float surfaceLevel = 0.5f;
-    public float noiseScale = 0.1f;
-
-    private float[,,] densityMap;
-    private MeshFilter meshFilter;
-
-    void Start()
-    {
-        meshFilter = GetComponent<MeshFilter>();
-        GenerateDensityMap();
-        GenerateMesh();
-    }
-
-    void GenerateDensityMap()
-    {
-        densityMap = new float[width + 1, height + 1, depth + 1];
-
-        for (int x = 0; x <= width; x++)
-        {
-            for (int y = 0; y <= height; y++)
-            {
-                for (int z = 0; z <= depth; z++)
-                {
-                    float noiseValue = Mathf.PerlinNoise(x * noiseScale, z * noiseScale) - (float)y / height;
-                    densityMap[x, y, z] = noiseValue;
-                }
-            }
-        }
-    }
-
-    void GenerateMesh()
+    public static Mesh GenerateMesh(MC_ChunkData chunkData, float surfaceLevel = 0.5f)
     {
         List<Vector3> vertices = new List<Vector3>();
         List<int> triangles = new List<int>();
 
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < chunkData.width; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < chunkData.height; y++)
             {
-                for (int z = 0; z < depth; z++)
+                for (int z = 0; z < chunkData.depth; z++)
                 {
                     Vector3 position = new Vector3(x, y, z);
                     float[] cube = new float[8];
@@ -54,7 +21,14 @@ public class MC_MeshGenerator : MonoBehaviour
                     for (int i = 0; i < 8; i++)
                     {
                         Vector3 corner = position + MyMarchingCubes.CornerTable[i];
-                        cube[i] = densityMap[(int)corner.x, (int)corner.y, (int)corner.z];
+                        int cx = (int)corner.x;
+                        int cy = (int)corner.y;
+                        int cz = (int)corner.z;
+
+                        if (cx < 0 || cy < 0 || cz < 0 || cx > chunkData.width || cy > chunkData.height || cz > chunkData.depth)
+                            continue;
+
+                        cube[i] = chunkData.densityMap[cx, cy, cz];
                     }
 
                     MyMarchingCubes.Polygonise(position, cube, surfaceLevel, vertices, triangles);
@@ -67,6 +41,7 @@ public class MC_MeshGenerator : MonoBehaviour
         mesh.triangles = triangles.ToArray();
         mesh.RecalculateNormals();
 
-        meshFilter.mesh = mesh;
+        return mesh;
     }
 }
+
