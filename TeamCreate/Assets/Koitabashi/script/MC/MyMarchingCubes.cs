@@ -63,8 +63,8 @@ public static class MyMarchingCubes
             int idx2 = AddVertex(vertList[MyMarchingTable.TriangleTable[cubeIndex, i + 2]], vertices);
 
             triangles.Add(idx0);
-            triangles.Add(idx1);
             triangles.Add(idx2);
+            triangles.Add(idx1);
         }
     }
 
