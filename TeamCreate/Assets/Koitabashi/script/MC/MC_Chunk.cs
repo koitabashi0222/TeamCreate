@@ -7,6 +7,8 @@ public class MC_Chunk : MonoBehaviour
 {
     public MC_ChunkData chunkData;
     public int chunkSize = 32;
+    float baseHeight = 0f; // 全体のベース高さ（地表）
+    float variation = 5f;   // 凹凸の程度（これを0にすると完全に平ら）
 
     public void Initialize(Vector3Int position)
     {
@@ -23,11 +25,12 @@ public class MC_Chunk : MonoBehaviour
                 for (int z = 0; z <= chunkSize; z++)
                 {
                     float worldY = transform.position.y + y;
-                    float surfaceHeight = Mathf.PerlinNoise(
-                        (transform.position.x + x) * 0.1f,
-                        (transform.position.z + z) * 0.1f) * chunkSize;
 
-                    // たとえば「地下20ブロックは常に詰まってる」
+                    float surfaceHeight = baseHeight + Mathf.PerlinNoise(
+    (transform.position.x + x) * 0.05f,
+    (transform.position.z + z) * 0.05f
+) * variation;
+
                     float baseFill = worldY < surfaceHeight || worldY < 20 ? 1f : 0f;
                     chunkData.densityMap[x, y, z] = baseFill;
                 }

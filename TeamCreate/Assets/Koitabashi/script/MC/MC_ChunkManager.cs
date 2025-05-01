@@ -17,7 +17,7 @@ public class MC_ChunkManager : MonoBehaviour
             for (int y = 0; y < chunkCountY; y++)
                 for (int z = 0; z < chunkCountZ; z++)
                 {
-                    Vector3Int pos = new Vector3Int(x * chunkSize, y * chunkSize, z * chunkSize);
+                    Vector3Int pos = new Vector3Int(x * chunkSize, -y * chunkSize, z * chunkSize);
                     GameObject chunkObj = Instantiate(chunkPrefab, pos, Quaternion.identity, transform);
                     MC_Chunk chunk = chunkObj.GetComponent<MC_Chunk>();
                     chunk.chunkSize = chunkSize;
