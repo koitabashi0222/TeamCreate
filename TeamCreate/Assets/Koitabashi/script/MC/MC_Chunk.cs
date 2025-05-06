@@ -10,7 +10,7 @@ public class MC_Chunk : MonoBehaviour
     float baseHeight = 0f; // 全体のベース高さ（地表）
     float variation = 5f;   // 凹凸の程度（これを0にすると完全に平ら）
 
-    public void Initialize(Vector3Int position)
+    public void Initialize(Vector3 position)
     {
         chunkData = new MC_ChunkData(chunkSize, chunkSize, chunkSize, chunkSize, 1f);
         transform.position = position;
