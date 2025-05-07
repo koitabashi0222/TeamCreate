@@ -19,20 +19,21 @@ public class MC_World : MonoBehaviour
         // スタート地点（ワールド中心）を広めに掘って空間に
         Vector3 startDigPos = new Vector3(
             chunkSize * chunkCountX / 2f,
-            -chunkSize * (chunkCountY / 2), // 地下中央
+            -chunkSize * 2, // 地下2チャンク分下
             chunkSize * chunkCountZ / 2f
         );
-        Dig(startDigPos, 10f); // 半径10くらいの空間を作る
+        Dig(startDigPos, 10f);
     }
 
     void GenerateChunks()
     {
         for (int x = 0; x < chunkCountX; x++)
             for (int y = 0; y < chunkCountY; y++)
-            {
-                int shiftedY = y - (chunkCountY / 2);
                 for (int z = 0; z < chunkCountZ; z++)
                 {
+                    // Y方向だけ反転させて、Y=0 から下に掘る構成にする
+                    int shiftedY = -y;
+
                     Vector3Int pos = new Vector3Int(x, shiftedY, z);
                     Vector3 worldPos = new Vector3(
                         x * chunkSize,
@@ -45,7 +46,6 @@ public class MC_World : MonoBehaviour
                     chunk.Initialize(worldPos);
                     chunkMap[pos] = chunk;
                 }
-            }
     }
 
     public void Dig(Vector3 worldPos, float radius, float value = 0f)
