@@ -6,30 +6,43 @@ using UnityEngine.InputSystem;
 public class VRDigTool : MonoBehaviour
 {
     public VoxelDigManager digManager;
-    public InputActionProperty triggerAction; // MetaXR‚Å‚ÌƒgƒŠƒK[“ü—Í
-
-    private List<Collider> overlappingColliders = new List<Collider>();
+    public float digInterval = 0.1f; // Œ@‚éŠÔŠu
     public float digRadius = 2f;
+
+    private float digTimer = 0f;
+    private Collider currentHitCollider = null;
 
     void OnTriggerEnter(Collider other)
     {
-        if (!overlappingColliders.Contains(other))
-            overlappingColliders.Add(other);
+        if (other.CompareTag("Terrain"))
+        {
+            currentHitCollider = other;
+        }
     }
 
     void OnTriggerExit(Collider other)
     {
-        overlappingColliders.Remove(other);
+        if (other == currentHitCollider)
+        {
+            currentHitCollider = null;
+        }
     }
 
     void Update()
     {
-        if (triggerAction.action.IsPressed())
+        if (currentHitCollider != null && OVRInput.Get(OVRInput.RawButton.RIndexTrigger))
         {
-            foreach (var col in overlappingColliders)
+            digTimer += Time.deltaTime;
+            if (digTimer >= digInterval)
             {
-                digManager.DigAt(col.ClosestPoint(transform.position));
+                digTimer = 0f;
+                Vector3 digPoint = transform.position;
+                digManager.DigAt(digPoint);
             }
+        }
+        else
+        {
+            digTimer = 0f;
         }
     }
 }

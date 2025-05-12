@@ -1,0 +1,34 @@
+{
+    "name": "XRInputActions",
+    "maps": [
+        {
+            "name": "XR",
+            "id": "b6375d8b-123a-44f8-994e-e1c54d9c8fe0",
+            "actions": [
+                {
+                    "name": "trigger",
+                    "type": "Value",
+                    "id": "fde27d15-fcb0-4a61-97d7-ebe99bab65c6",
+                    "expectedControlType": "Double",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2d55bd9a-ddc3-41ba-a3d6-70b71c9be978",
+                    "path": "/user/hand/right/input/trigger/value",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "trigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
